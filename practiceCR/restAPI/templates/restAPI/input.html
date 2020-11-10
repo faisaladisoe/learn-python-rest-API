@@ -1,0 +1,27 @@
+{% extends '../base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>INPUT</title>
+{% endblock title %}
+
+{% block content %}
+<form method="post" autocomplete="off">
+    {% csrf_token %}
+    {{ data|crispy }}
+    <div class="row">
+        <div class="col-md-8" style="margin-bottom: 1rem;">
+            <button type="submit" class="btn btn-success btn-block btn-lg">
+                <i class="fa fa-database"></i>
+                Submit
+            </button>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'index' %}" class="btn btn-secondary btn-block btn-lg">
+                <i class="fa fa-list"></i>
+                Back to list
+            </a>
+        </div>
+    </div>
+</form>
+{% endblock content %}

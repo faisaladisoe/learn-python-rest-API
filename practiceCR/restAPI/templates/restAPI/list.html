@@ -1,0 +1,66 @@
+{% extends '../base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>LIST</title>
+{% endblock title %}
+
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-3">
+            {{ form.search|as_crispy_field }}
+        </div>
+        <div class="col-md-3">
+            {{ form.groupby|as_crispy_field }}
+        </div>
+        <div class="col-md-3">
+            {{ form.sorting|as_crispy_field }}
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-outline-info btn-block btn-lg" style="margin-top: 1.5rem; margin-bottom: 2rem;">
+                <i class="fa fa-search"></i>
+                Go
+            </button>
+        </div>
+    </div>
+</form>
+<table class="table table-borderless">
+    <thead class="border-bottom font-weight-bold">
+        <tr>
+            <td>Nick Name</td>
+            <td>Full Name</td>
+            <td>Class</td>
+            <!-- <td>Random Thought</td>
+            <td>Email</td>
+            <td>IG</td>
+            <td>Linkedin</td> -->
+            <td>
+                <a href="{% url 'inputUser' %}" class="btn btn-outline-success">
+                    <i class="fa fa-plus"></i>
+                    Add new
+                </a>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in data %}
+            <tr>
+                <td>{{ item.nickname }}</td>
+                <td>{{ item.fullname }}</td>
+                <td>{{ item.classroom }}</td>
+                <!-- <td>{{ item.randomThought }}</td>
+                <td>{{ item.email }}</td>
+                <td>{{ item.instagram }}</td>
+                <td>{{ item.linkedin }}</td> -->
+                <td>
+                    <a href="" class="btn text-secondary px-0">
+                        <i class="fa fa-edit fa-lg"></i>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

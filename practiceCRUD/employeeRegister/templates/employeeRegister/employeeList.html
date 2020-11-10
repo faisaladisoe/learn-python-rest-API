@@ -1,0 +1,32 @@
+{% extends '../base.html' %}
+
+{% block title %}
+<title>List</title>
+{% endblock title %}
+
+{% block content %}
+<table class="table table-borderless">
+    <thead class="border-bottom font-weight-bold">
+        <tr>
+            <td>Full name</td>
+            <td>Mobile</td>
+            <td>Position</td>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for employee in employeeList %}
+            <tr>
+                <td>{{ employee.fullname }}</td>
+                <td>{{ employee.mobile }}</td>
+                <td>{{ employee.position }}</td>
+                <td>
+                    <a href="{% url 'employeeUpdate' employee.id %}" class="btn text-secondary px-0">
+                        <i class="fa fa-edit fa-lg"></i>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}
