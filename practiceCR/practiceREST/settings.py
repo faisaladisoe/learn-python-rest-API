@@ -10,6 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import os
+import dotenv
+import django_heroku
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,14 +23,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
+# Add .env variables anywhere before SECRET_KEY
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'a=*eu2y3#(z7lf$)d1e=+gcj7yx2#7$!wy=mrs3#0(j7j@l8)1'
+SECRET_KEY = os.environ.get('SECRET_KEY')
+
+# Automatically determine environment by detecting if DATABASE_URL variable.
+# DATABASE_URL is provided by Heroku if a database add-on is added
+# (e.g. Heroku Postgres).
+PRODUCTION = os.getenv('DATABASE_URL') is not None
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = not PRODUCTION
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+if not PRODUCTION:
+    ALLOWED_HOSTS += ['.localhost', '127.0.0.1', '[::1]']
 
 # Application definition
 
@@ -45,6 +61,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -82,7 +99,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'restapi',
         'USER': 'postgres',
-        'PASSWORD': 'faisal123',
+        'PASSWORD': os.environ.get('DB_PASS'),
         'HOST': 'localhost'
     }
 }
@@ -125,3 +142,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = BASE_DIR / 'static'
+
+django_heroku.settings(locals())
